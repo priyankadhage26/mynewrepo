@@ -1,0 +1,41 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_container
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    networks:
+      - ola_network
+
+ 
+
+ 
+
+  springboot:
+    build:
+      context: .  # Specify the build context
+      dockerfile: Dockerfile  # Specify the Dockerfile to use
+    container_name: employee_app
+    ports:
+      - "8090:8090"
+    depends_on:
+      - postgres
+    networks:
+      - ola_network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+
+ 
+
+ 
+
+networks:
+  ola_network:
+    driver: bridge
